@@ -1,4 +1,3 @@
-
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,28 +5,51 @@ public class PlayerInputControl : MonoBehaviour
 {
     [SerializeField] private Transform cameraTarget;
 
+    [Range(0f, 25f)]
+    [SerializeField] private float speedOfCharacterMoving;
     [Range(1f, 3f)]
     [SerializeField] private float multyplyingSpeedRotation;
     [Range(0f, 1f)]
     [SerializeField] private float maximumAllowedRotationInQuaternion;
 
+    private Vector3 rawInputMovement = Vector3.zero;
+
+    private void FixedUpdate()
+    {
+        if (rawInputMovement != Vector3.zero)
+        {
+            MoveCharacterInDirection(rawInputMovement);
+        }
+    }
+
+    public void Move(InputAction.CallbackContext context)
+    {
+        Vector3 movementDirection = context.ReadValue<Vector2>();
+        rawInputMovement = new Vector3(movementDirection.x, 0, movementDirection.y);
+    }
+    
+    private void MoveCharacterInDirection(Vector3 direction)
+    {
+        transform.Translate(direction * speedOfCharacterMoving * Time.deltaTime);
+    }
+
     public void Look(InputAction.CallbackContext context)
     {
-        float mouseMovementHorizontal = context.ReadValue<Vector2>().x;
-        RotateCameraInMouseDirection(mouseMovementHorizontal);
-        ClampRotationOfCamera();
+        float movementHorizontal = context.ReadValue<Vector2>().x;
+        RotateCameraInHorizontalDirection(movementHorizontal);
+        ClampRotationOfObject(cameraTarget);
     }
 
-    private void RotateCameraInMouseDirection(float mouseMovementHorizontal)
+    private void RotateCameraInHorizontalDirection(float movementDirection)
     {
-        cameraTarget.Rotate(Vector3.up * mouseMovementHorizontal * multyplyingSpeedRotation * Time.deltaTime);
+        cameraTarget.Rotate(Vector3.up * movementDirection * multyplyingSpeedRotation * Time.deltaTime);
     }
 
-    private void ClampRotationOfCamera()
+    private void ClampRotationOfObject(Transform objectTransform)
     {
-        Quaternion currentRotationOfCamera = cameraTarget.rotation;
-        currentRotationOfCamera.y = Mathf.Clamp(currentRotationOfCamera.y, -maximumAllowedRotationInQuaternion, maximumAllowedRotationInQuaternion);
-        cameraTarget.rotation = currentRotationOfCamera;
+        Quaternion currentRotationOfCameraTarget = objectTransform.rotation;
+        currentRotationOfCameraTarget.y = Mathf.Clamp(currentRotationOfCameraTarget.y, -maximumAllowedRotationInQuaternion, maximumAllowedRotationInQuaternion);
+        objectTransform.rotation = currentRotationOfCameraTarget;
     }
 
     private void OnDrawGizmos()

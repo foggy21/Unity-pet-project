@@ -6,7 +6,7 @@ public class PlayerInputController : MonoBehaviour
     [SerializeField] private CameraSettings cameraTarget;
     [Range(0f, 25f)]
     [SerializeField] private float speedOfCharacterMoving;
-    [Range(1f, 10f)]
+    [Range(0f, 50f)]
     [SerializeField] private float speedOfCharacterRotation;
     [Range(1f, 100f)]
     [SerializeField] private float multyplyingSpeedRotation;
@@ -40,15 +40,7 @@ public class PlayerInputController : MonoBehaviour
 
     private void RotateCharacterRelativeToCamera(Transform camera)
     {
-        Quaternion finalCharacterRotation = camera.rotation;
-        RotateCharacterOnAxis(finalCharacterRotation);
-    }
-
-    private void RotateCharacterOnAxis(Quaternion finalCharacterRotation)
-    {
-        float currentInterpolateParametr = 0;
-        currentInterpolateParametr += speedOfCharacterRotation * Time.fixedDeltaTime;
-        transform.rotation = Quaternion.Lerp(transform.rotation, finalCharacterRotation, currentInterpolateParametr);
+        characterRigidbody.rotation = Quaternion.Lerp(characterRigidbody.rotation, camera.rotation, speedOfCharacterRotation * Time.fixedDeltaTime);
     }
     
     public void OnMove(InputAction.CallbackContext context)
@@ -60,11 +52,18 @@ public class PlayerInputController : MonoBehaviour
     public void OnLook(InputAction.CallbackContext context)
     {
         float inputOfRotation = context.ReadValue<Vector2>().x;
+        if (inputOfRotation != 0)
+            inputOfRotation = magnitudeInputOfRotation(inputOfRotation);
         RotateCameraInHorizontalDirection(inputOfRotation);
     }
 
-    private void RotateCameraInHorizontalDirection(float movementDirection)
+    private void RotateCameraInHorizontalDirection(float inputOfRotation)
     {
-        cameraTarget.transform.Rotate(Vector3.up * movementDirection * multyplyingSpeedRotation * Time.deltaTime);
+        cameraTarget.transform.Rotate(Vector3.up * inputOfRotation * multyplyingSpeedRotation * Time.deltaTime);
+    }
+
+    private float magnitudeInputOfRotation(float inputOfRotation)
+    {
+        return inputOfRotation / Mathf.Abs(inputOfRotation);
     }
 }

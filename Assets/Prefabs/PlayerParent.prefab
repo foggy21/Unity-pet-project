@@ -418,4 +418,4 @@ MonoBehaviour:
   cameraTarget: {fileID: 2985068658621783793}
   speedOfCharacterMoving: 5
   speedOfCharacterRotation: 10
-  multyplyingSpeedRotation: 80
+  multyplyingSpeedRotation: 60

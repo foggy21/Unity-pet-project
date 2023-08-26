@@ -6,7 +6,7 @@ public class PlayerInputController : MonoBehaviour
     [SerializeField] private CameraSettings cameraTarget;
     [Range(0f, 25f)]
     [SerializeField] private float speedOfCharacterMoving;
-    [Range(0f, 50f)]
+    [Range(0f, 20f)]
     [SerializeField] private float speedOfCharacterRotation;
     [Range(1f, 100f)]
     [SerializeField] private float multyplyingSpeedRotation;
@@ -26,21 +26,31 @@ public class PlayerInputController : MonoBehaviour
 
     private void MoveCharacterInDirection(Vector3 direction)
     {
-        Vector3 localDirectionOfCharacter = GetLocalDirectionOfCharacterFromGlobal(direction);
-        characterRigidbody.MovePosition(characterRigidbody.position + localDirectionOfCharacter * speedOfCharacterMoving * Time.fixedDeltaTime);
+        Vector3 relativeDirectionOfMovementToCamera = GetRelativeInputToCamera(cameraTarget.transform, direction);
+        characterRigidbody.MovePosition(characterRigidbody.position + relativeDirectionOfMovementToCamera * speedOfCharacterMoving * Time.fixedDeltaTime);
         if (direction != Vector3.zero)
-            RotateCharacterRelativeToCamera(cameraTarget.transform);
+        {
+            RotateCharacterRelativeToCameraRotation(cameraTarget.transform.rotation);
+        }
     }
 
-    private Vector3 GetLocalDirectionOfCharacterFromGlobal(Vector3 globalDirection)
+    private Vector3 GetRelativeInputToCamera(Transform camera, Vector3 direction)
     {
-        Vector3 localDirection = transform.TransformDirection(globalDirection);
-        return localDirection;
+        Vector3 cameraForward = NormolizeDirectionOfCamera(camera.forward);
+        Vector3 cameraRight = NormolizeDirectionOfCamera(camera.right);
+        Vector3 relativeDirectionOfCamera = cameraForward * direction.z + cameraRight * direction.x;
+        return relativeDirectionOfCamera;
     }
 
-    private void RotateCharacterRelativeToCamera(Transform camera)
+    private Vector3 NormolizeDirectionOfCamera(Vector3 directionOfCamera)
     {
-        characterRigidbody.rotation = Quaternion.Lerp(characterRigidbody.rotation, camera.rotation, speedOfCharacterRotation * Time.fixedDeltaTime);
+        directionOfCamera.y = 0;
+        return directionOfCamera.normalized;
+    }
+
+    private void RotateCharacterRelativeToCameraRotation(Quaternion cameraRotation)
+    {
+        transform.rotation = Quaternion.Slerp(transform.rotation, cameraRotation, speedOfCharacterRotation * Time.fixedDeltaTime);
     }
     
     public void OnMove(InputAction.CallbackContext context)
@@ -53,7 +63,7 @@ public class PlayerInputController : MonoBehaviour
     {
         float inputOfRotation = context.ReadValue<Vector2>().x;
         if (inputOfRotation != 0)
-            inputOfRotation = magnitudeInputOfRotation(inputOfRotation);
+            inputOfRotation = normalizeInputOfRotation(inputOfRotation);
         RotateCameraInHorizontalDirection(inputOfRotation);
     }
 
@@ -62,7 +72,7 @@ public class PlayerInputController : MonoBehaviour
         cameraTarget.transform.Rotate(Vector3.up * inputOfRotation * multyplyingSpeedRotation * Time.deltaTime);
     }
 
-    private float magnitudeInputOfRotation(float inputOfRotation)
+    private float normalizeInputOfRotation(float inputOfRotation)
     {
         return inputOfRotation / Mathf.Abs(inputOfRotation);
     }

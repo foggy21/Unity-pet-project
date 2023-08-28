@@ -178,7 +178,7 @@ GameObject:
   - component: {fileID: 150438601025498367}
   - component: {fileID: 6262791170351815342}
   - component: {fileID: 8240157187156961197}
-  - component: {fileID: 2888034462391169804}
+  - component: {fileID: 8643785516778765137}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -328,7 +328,7 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2888034462391169804}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: PlayerInputControl, Assembly-CSharp
         m_MethodName: OnLook
         m_Mode: 0
@@ -384,7 +384,7 @@ MonoBehaviour:
     m_ActionName: UI/TrackedDeviceOrientation
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2888034462391169804}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: PlayerInputControl, Assembly-CSharp
         m_MethodName: OnMove
         m_Mode: 0
@@ -403,7 +403,7 @@ MonoBehaviour:
   m_DefaultActionMap: Movement
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 3286056277918980526}
---- !u!114 &2888034462391169804
+--- !u!114 &8643785516778765137
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -412,10 +412,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 8213004115763399677}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bad14ea96b253514cb1c56669975c4d5, type: 3}
+  m_Script: {fileID: 11500000, guid: 4da4693344d25a5438f265041ca89047, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraTarget: {fileID: 2985068658621783793}
-  speedOfCharacterMoving: 5
-  speedOfCharacterRotation: 10
-  multyplyingSpeedRotation: 60

@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class CameraSettings : MonoBehaviour
 {
+    public CameraSettings TargetCamera { get => this; }
+
     [SerializeField] private Transform actor;
 
     [Range(-10f, 10f)]

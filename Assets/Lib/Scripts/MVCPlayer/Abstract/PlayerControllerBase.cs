@@ -1,19 +1,22 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public abstract class PlayerControllerBase
+namespace MVC
 {
-    protected PlayerModelBase playerModel;
-
-    protected Vector3 direcitonOfMovement;
-    protected Vector3 direcitonOfRotation;
-
-    public abstract void OnMove(InputAction.CallbackContext context);
-
-    public abstract void OnLook(InputAction.CallbackContext context);
-
-    public PlayerControllerBase(PlayerModelBase playerModel)
+    public abstract class PlayerControllerBase
     {
-        this.playerModel = playerModel;
+        protected PlayerModelBase playerModel;
+
+        protected Vector3 direcitonOfMovement;
+        protected Vector3 direcitonOfRotation;
+
+        public abstract void OnMove(InputAction.CallbackContext context);
+
+        public abstract void OnLook(InputAction.CallbackContext context);
+
+        public PlayerControllerBase(PlayerModelBase playerModel)
+        {
+            this.playerModel = playerModel;
+        }
     }
 }

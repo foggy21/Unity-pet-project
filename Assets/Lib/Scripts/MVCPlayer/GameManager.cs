@@ -1,28 +1,30 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class GameManager : MonoBehaviour
+namespace MVC 
 {
-    [SerializeField] private PlayerInputManager playerInputManager;
-
-    private PlayerModel playerModel;
-    private PlayerController playerController;
-    private PlayerView playerView;
-
-    private CameraSettings targetCamera;
-
-    void Awake()
+    public class GameManager : MonoBehaviour
     {
-        targetCamera = playerInputManager.playerPrefab.GetComponentInChildren<CameraSettings>();
-        playerView = playerInputManager.playerPrefab.GetComponentInChildren<PlayerView>();
-    }
+        [SerializeField] private PlayerInputManager playerInputManager;
 
-    private void Start()
-    {
-        playerModel = new PlayerModel(playerView, targetCamera);
-        playerController = new PlayerController(playerModel);
+        private PlayerModel playerModel;
+        private PlayerController playerController;
+        private PlayerView playerView;
 
+        private CameraSettings targetCamera;
 
-        //Failed to input data with new input system when controller isn't MonoBehaviour.
+        void Awake()
+        {
+            targetCamera = playerInputManager.playerPrefab.GetComponentInChildren<CameraSettings>();
+            playerView = playerInputManager.playerPrefab.GetComponentInChildren<PlayerView>();
+        }
+
+        private void Start()
+        {
+            playerModel = new PlayerModel(playerView, targetCamera);
+            playerController = new PlayerController(playerModel);
+
+            //Failed to input data with new input system when controller isn't MonoBehaviour.
+        }
     }
 }
